@@ -18,7 +18,7 @@
 #define CHANGE_INK_TO_CYAN	            6		
 #define CHANGE_INK_TO_WHITE	            7	
 
-#define     	                    8		
+#define USE_STANDARD_CHARSET    	                    8		
 #define USE_ALTERNATE_CHARSET	                    9		
 #define USE_DOUBLE_SIZE_STANDARD_CHARSET	    10		
 #define USE_DOUBLE_SIZE_ALTERNATE_CHARSET	    11		
@@ -49,6 +49,12 @@ extern int LargeX1;
 extern int LargeY1;
 extern void DrawClippedLine();
 
+extern char CurrentPixelX;
+extern char CurrentPixelY;
+extern char OtherPixelX;
+extern char OtherPixelY;
+extern void DrawLine8();
+
 void change_char(char c, unsigned char patt01, unsigned char patt02, unsigned char patt03, unsigned char patt04, unsigned char patt05, unsigned char patt06, unsigned char patt07, unsigned char patt08) {
     unsigned char* adr;
     adr      = (unsigned char*)(0xB400 + c * 8);
@@ -65,25 +71,39 @@ void change_char(char c, unsigned char patt01, unsigned char patt02, unsigned ch
 void prepare_graphics() {
     int ii, jj;
     
-    memset(HIRES_SCREEN_ADDRESS+8*SCREEN_WIDTH, 64, 5000);
-    memset(LORES_SCREEN_ADDRESS+SCREEN_WIDTH, 32, 1000);
+    memset(HIRES_SCREEN_ADDRESS, 64, 5500);
+    memset(LORES_SCREEN_ADDRESS, 32, 40*25);
     // cls();
-    for (ii = 1; ii<=5 ; ii++){
+    poke (LORES_SCREEN_ADDRESS,SWITCH_TO_TEXT_MODE_50HZ);
+    poke (LORES_SCREEN_ADDRESS+1,CHANGE_INK_TO_RED);
+    for (ii = 0; ii<=4 ; ii++){
+        // poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,SWITCH_TO_TEXT_MODE_50HZ);
         // poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_GREEN);
-        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,SWITCH_TO_TEXT_MODE_50HZ);
-        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+1,CHANGE_INK_TO_WHITE);
+        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_RED);
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+17,SWITCH_TO_HIRES_MODE_50HZ);
         for (jj = 0; jj < 8; jj++) {
             poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+24,SWITCH_TO_TEXT_MODE_50HZ);
         }
     }
-    for (ii=5; ii<=SCREEN_HEIGHT-NB_LESS_LINES_4_COLOR ; ii++){
-        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,SWITCH_TO_HIRES_MODE_50HZ);
-        for (jj = 0; jj < 8; jj++) {
-            poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+1,CHANGE_INK_TO_GREEN);
-            poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+2,SWITCH_TO_TEXT_MODE_50HZ);
-        }
+    for (ii=5; ii<=16 ; ii++){
+        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_GREEN);
+        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+1,SWITCH_TO_HIRES_MODE_50HZ);
+        for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
     }
+    // for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((15*8+jj)*SCREEN_WIDTH)+0,CHANGE_INK_TO_GREEN);
+
+    // for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((15*8+jj)*SCREEN_WIDTH)+1,SWITCH_TO_TEXT_MODE_50HZ);
+    // for (ii=5; ii<=SCREEN_HEIGHT-NB_LESS_LINES_4_COLOR ; ii++){
+    //     poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_GREEN);
+    // }
+
+    // for (ii=5; ii<=SCREEN_HEIGHT-NB_LESS_LINES_4_COLOR ; ii++){
+    //     poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,SWITCH_TO_HIRES_MODE_50HZ);
+    //     for (jj = 0; jj < 8; jj++) {
+    //         poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+1,CHANGE_INK_TO_GREEN);
+    //         poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+2,SWITCH_TO_TEXT_MODE_50HZ);
+    //     }
+    // }
         // poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_GREEN);
         // poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+1,SWITCH_TO_HIRES_MODE_50HZ);
     //for (; ii<=20 ; ii++)
@@ -106,23 +126,28 @@ void prepare_graphics() {
 //     }
     // poke (HIRES_SCREEN_ADDRESS+(((SCREEN_HEIGHT-NB_LESS_LINES_4_COLOR)*8+0)*SCREEN_WIDTH)+0,SWITCH_TO_TEXT_MODE_50HZ);
 }
-
+#define LASTLINE 135
 void main()
 {
         printf ("debut \n");
         // get();
         GenerateTables();
         prepare_graphics();
-        sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+2 , "ENEMY IN RANGE");
-        sprintf (LORES_SCREEN_ADDRESS+(3*SCREEN_WIDTH)+2 , "ENEMY TO LEFT");
-        sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+26 , "HI SCR    9000");
-        sprintf (LORES_SCREEN_ADDRESS+(4*SCREEN_WIDTH)+26 , "SCORE     2000");
+        sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+2 , "ENEMY IN RANGE");
+        sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+2 , "ENEMY TO LEFT");
+        sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+26 , "HI SCR    9000");
+        sprintf (LORES_SCREEN_ADDRESS+(3*SCREEN_WIDTH)+26 , "SCORE     2000");
+
+        OtherPixelX=120;
+        OtherPixelY=0;
+        CurrentPixelX=120;
+        CurrentPixelY=3*8;
+        DrawLine8();
 
         LargeX0=3;
-        LargeY0=100;
+        LargeY0=LASTLINE;
         LargeX1=239;
-        LargeY1=100;
-
+        LargeY1=LASTLINE;
         DrawClippedLine();
 
         get();
