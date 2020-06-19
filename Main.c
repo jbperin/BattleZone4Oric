@@ -126,6 +126,7 @@ void prepare_graphics() {
 //     }
     // poke (HIRES_SCREEN_ADDRESS+(((SCREEN_HEIGHT-NB_LESS_LINES_4_COLOR)*8+0)*SCREEN_WIDTH)+0,SWITCH_TO_TEXT_MODE_50HZ);
 }
+#define FIRSTLINE 40
 #define LASTLINE 135
 void main()
 {
@@ -144,9 +145,15 @@ void main()
         CurrentPixelY=3*8;
         DrawLine8();
 
-        LargeX0=3;
-        LargeY0=LASTLINE;
+        LargeX0=0;
+        LargeY0=FIRSTLINE;
         LargeX1=239;
+        LargeY1=FIRSTLINE;
+        DrawClippedLine();
+
+        LargeX0=-250;
+        LargeY0=LASTLINE;
+        LargeX1=400;
         LargeY1=LASTLINE;
         DrawClippedLine();
 
