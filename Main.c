@@ -263,22 +263,23 @@ void gameLoop() {
         if (enemyToLeft) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+1 , "\14ENEMY TO LEFT");}
         if (enemyToRight) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+1 , "\14ENEMY TO RIDHT");}
         if (nbRemaingLife==3) 
-            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+27 , "ab");
+            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+26 , "abcd");
         else 
-            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+27 , "ab");
+            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+26 , "abcd");
 
         if (nbRemaingLife>=2) 
-            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+30 , "ab");
+        
+            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+30 , "abcd");
         else 
-            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+30 , "ab");
+            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+30 , "abcd");
 
         if (nbRemaingLife>=1) 
-            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+33 , "ab");
+            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+34 , "abcd");
         else 
-            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+33 , "ab");
+            sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+34 , "abcd");
 
-        sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+26 , "HI SCR    %d",highScore);
-        sprintf (LORES_SCREEN_ADDRESS+(3*SCREEN_WIDTH)+26 , "SCORE     %d",currentScore);
+        sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+28 , "HI SCR  %d",highScore);
+        sprintf (LORES_SCREEN_ADDRESS+(3*SCREEN_WIDTH)+28 , "SCORE   %d",currentScore);
 
 
 
@@ -324,13 +325,74 @@ void player () {
         break;
     }
 }
+#define B(x) S_to_binary_(#x)
 
+unsigned char S_to_binary_(const char *s)
+{
+        unsigned char i = 0;
+        while (*s) {
+                i <<= 1;
+                i += *s++ - '0';
+        }
+        return i;
+}
 void initGame(){
 
         GenerateTables();
         glCamRotZ = 0;
         prepare_graphics();
 
+// 000001100000000000000000
+// 00000011000000000000000000
+// 000000011100000000000000
+// 000000000111111100000000
+// 000000000100000100000000
+// 000001111111111111100000
+// 000010010000000010010000
+// 000001111111111111100000
+
+
+
+        change_char('a', 
+            B(00000001), 
+            B(00000000), 
+            B(00000000), 
+            B(00000000), 
+            B(00000000), 
+            B(00000001), 
+            B(00000010), 
+            B(00000001)
+        );
+        change_char('b', 
+            B(00100000), 
+            B(00110000), 
+            B(00011100), 
+            B(00000111), 
+            B(00000100), 
+            B(00111111), 
+            B(00010000), 
+            B(00111111)
+        );
+        change_char('c', 
+            B(00000000), 
+            B(00000000), 
+            B(00000000), 
+            B(00111100), 
+            B(00000100), 
+            B(00111111), 
+            B(00000010), 
+            B(00111111)
+        );
+        change_char('d', 
+            B(00000000), 
+            B(00000000), 
+            B(00000000), 
+            B(00000000), 
+            B(00000000), 
+            B(00100000), 
+            B(00010000), 
+            B(00100000)
+        );
 
         drawHorizonLine();
 
