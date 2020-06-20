@@ -119,7 +119,7 @@ void change_char(char c, unsigned char patt01, unsigned char patt02, unsigned ch
 void drawRadar () {
     CentreX=126;
 	CentreY=20;
-    Radius=16;
+    Radius=15;
     circleMidpoint();
 
     OtherPixelX=CentreX;
@@ -165,9 +165,14 @@ void prepare_graphics() {
     for (ii=5; ii<=16 ; ii++){
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_GREEN);
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+1,SWITCH_TO_HIRES_MODE_50HZ);
-        for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
+        for (jj = 0; jj < 8; jj++) {
+            poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
+        }
     }
-
+    poke (LORES_SCREEN_ADDRESS+(24*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
+    poke (LORES_SCREEN_ADDRESS+(25*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
+    poke (LORES_SCREEN_ADDRESS+(26*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
+    poke (LORES_SCREEN_ADDRESS+(27*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
 }
 
 unsigned char isAllowedPosition(signed char X, signed char Y, signed char Z) {
@@ -281,9 +286,7 @@ void gameLoop() {
         sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+28 , "HI SCR  %d",highScore);
         sprintf (LORES_SCREEN_ADDRESS+(3*SCREEN_WIDTH)+28 , "SCORE   %d",currentScore);
 
-
-
-        sprintf(ADR_BASE_SCREEN, "(X=%d Y=%d Z=%d) [%d %d]", glCamPosX, glCamPosY, glCamPosZ, glCamRotZ, glCamRotX);
+        // sprintf(ADR_BASE_SCREEN, "(X=%d Y=%d Z=%d) [%d %d]", glCamPosX, glCamPosY, glCamPosZ, glCamRotZ, glCamRotX);
     }
 }
 
@@ -309,18 +312,8 @@ void player () {
         backward(); break;
     case 11:  // up
         forward(); break;
-    // case 80:  // P        HEP !! DONT TOUCH THAT !!!
-    //     glCamPosZ += 1; break;
-    // case 59:  // ;       FORGET ABOUT IT !!
-    //     glCamPosZ -= 1; break;
     case 81:  // Q
         inGame = 0; break;
-    // case 65:  // A
-    //     glCamRotX -= 2; break;
-    // case 90:  // Z
-    //     shiftLeft(); break;
-    // case 88:  // X
-    //     shiftRight(); break;
     default:
         break;
     }
@@ -350,48 +343,45 @@ void initGame(){
 // 000001111111111111100000
 // 000010010000000010010000
 // 000001111111111111100000
-
-
-
         change_char('a', 
             B(00000001), 
             B(00000000), 
             B(00000000), 
             B(00000000), 
-            B(00000000), 
             B(00000001), 
             B(00000010), 
-            B(00000001)
+            B(00000001),
+            B(00000000) 
         );
         change_char('b', 
-            B(00100000), 
             B(00110000), 
             B(00011100), 
             B(00000111), 
             B(00000100), 
             B(00111111), 
             B(00010000), 
-            B(00111111)
+            B(00111111),
+            B(00000000) 
         );
         change_char('c', 
-            B(00000000), 
             B(00000000), 
             B(00000000), 
             B(00111100), 
             B(00000100), 
             B(00111111), 
             B(00000010), 
-            B(00111111)
+            B(00111111),
+            B(00000000) 
         );
         change_char('d', 
             B(00000000), 
             B(00000000), 
             B(00000000), 
             B(00000000), 
-            B(00000000), 
             B(00100000), 
             B(00010000), 
-            B(00100000)
+            B(00100000),
+            B(00000000) 
         );
 
         drawHorizonLine();
