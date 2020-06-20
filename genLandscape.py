@@ -165,9 +165,101 @@ tabSegments=[
 # }
 
 
+## TABLE TO EXPORT
+tabPointsX=[p['X'] for p in tabPoints]
+tabPointsY=[p['Y'] for p in tabPoints]
+
+tabSegPt1=[s['idxPt1'] for s in tabSegments]
+tabSegPt2=[s['idxPt2'] for s in tabSegments]
+
+tabIdxFirstSeg=[]
+tabNbLeftClipSeg=[]
+tabNbRightClipSeg=[]
+tabNoClipSeg=[]
+tabOffset=[]
+
+
+ANGLE_OF_VIEW = 62.43902439
+ANGLE2PIXEL = 256.0/984.0
 def main ():
 
-    print ("coucou")
+    # print ("coucou", ANGLE2PIXEL)
+
+    for ii in range (0,64):
+        #print (ii*4.0, " => ",(ii*4.0+ANGLE_OF_VIEW))
+        ## recherche des points dans le FOV
+        lPointsInFov = [p['idx'] for p in tabPoints if ((p['X']*ANGLE2PIXEL >= ii*4.0) and (p['X']*ANGLE2PIXEL < ii*4.0+ANGLE_OF_VIEW ))]
+        
+        ## recherche des segments ayant au moins un point dans le FOV
+        lSegInPov = [s['idx'] for s in tabSegments if ((s['idxPt1'] in lPointsInFov) or (s['idxPt2'] in lPointsInFov))]
+        #print (lSegInPov)
+        firstSeg = min (lSegInPov)
+        
+
+        nbSeg = max (lSegInPov) - firstSeg + 1
+
+        ## calcul du nombre de segments à clipper
+        leftClip = [sinpov for sinpov in lSegInPov if tabSegments[sinpov]['idxPt1'] not in lPointsInFov]
+        if len(leftClip) > 0:
+            nbLeftClip = max(leftClip) - min (leftClip) + 1
+        else :
+            nbLeftClip = 0
+        rightClip = [sinpov for sinpov in lSegInPov if tabSegments[sinpov]['idxPt2'] not in lPointsInFov]
+        if len(rightClip) > 0:
+            nbRightClip = max(rightClip) - min (rightClip) + 1
+        else:
+            nbRightClip = 0
+
+        nbNoClip = nbSeg - nbLeftClip - nbRightClip
+        
+        print (ii*4.0, " => ",(ii*4.0+ANGLE_OF_VIEW), firstSeg, nbLeftClip, nbNoClip, nbRightClip)
+        tabIdxFirstSeg.append(firstSeg)
+        tabNbLeftClipSeg.append (nbLeftClip)
+        tabNoClipSeg.append (nbNoClip)
+        tabNbRightClipSeg.append (nbRightClip)
+        tabOffset.append (round(ii*4.0/ANGLE2PIXEL))
+
+# extern unsigned int  tabPointsX[];
+# extern unsigned char tabPointsY[];
+
+# extern unsigned char tabSegPt1[];
+# extern unsigned char tabSegPt2[];
+
+# extern unsigned char tabIdxFirstSeg[];
+# extern unsigned char tabNbLeftClipSeg[];
+# extern unsigned char tabNbRightClipSeg[];
+# extern unsigned char tabNoClipSeg[];
+# extern unsigned int  tabOffset[];
+
+    with open("landscape_c.c", "w") as f:
+        f.write ("unsigned int  tabPointsX[] = {" + ', '.join(map(str,tabPointsX)) + "};\n")
+        f.write ("unsigned char tabPointsY[] = {" + ', '.join(map(str,tabPointsY)) + "};\n")
+        f.write ("unsigned char tabSegPt1[] = {" + ', '.join(map(str,tabSegPt1)) + "};\n")
+        f.write ("unsigned char tabSegPt2[] = {" + ', '.join(map(str,tabSegPt2)) + "};\n")
+        f.write ("unsigned char tabIdxFirstSeg[] = {" + ', '.join(map(str,tabIdxFirstSeg)) + "};\n")
+        f.write ("unsigned char tabNbLeftClipSeg[] = {" + ', '.join(map(str,tabNbLeftClipSeg)) + "};\n")
+        f.write ("unsigned char tabNbRightClipSeg[] = {" + ', '.join(map(str,tabNbRightClipSeg)) + "};\n")
+        f.write ("unsigned char tabNoClipSeg[] = {" + ', '.join(map(str,tabNoClipSeg)) + "};\n")
+        f.write ("unsigned int  tabOffset[] = {" + ', '.join(map(str,tabOffset)) + "};\n")
+
+    with open("landscape_s.s", "w") as f:
+        f.write ("_tabPointsX\n\t.word " + '\n\t.word '.join(map(str,tabPointsX)) + "\n")
+        f.write ("_tabPointsY\n\t.byt " + '\n\t.byt '.join(map(str,tabPointsY)) + "\n")
+        f.write ("_tabSegPt1\n\t.byt " + '\n\t.byt '.join(map(str,tabSegPt1)) + "\n")
+        f.write ("_tabSegPt2\n\t.byt " + '\n\t.byt '.join(map(str,tabSegPt2)) + "\n")
+        f.write ("_tabIdxFirstSeg\n\t.byt " + '\n\t.byt '.join(map(str,tabIdxFirstSeg)) + "\n")
+        f.write ("_tabNbLeftClipSeg\n\t.byt " + '\n\t.byt '.join(map(str,tabNbLeftClipSeg)) + "\n")
+        f.write ("_tabNbRightClipSeg\n\t.byt " + '\n\t.byt '.join(map(str,tabNbRightClipSeg)) + "\n")
+        f.write ("_tabNoClipSeg\n\t.byt " + '\n\t.byt '.join(map(str,tabNoClipSeg)) + "\n")
+        f.write ("_tabOffset\n\t.word " + '\n\t.word '.join(map(str,tabOffset)) + "\n")
+        # f.write ("unsigned char tabPointsY[] = {" + ', '.join(map(str,tabPointsY)) + "};\n")
+        # f.write ("unsigned char [] = {" + ', '.join(map(str,tabSegPt1)) + "};\n")
+        # f.write ("unsigned char [] = {" + ', '.join(map(str,tabSegPt2)) + "};\n")
+        # f.write ("unsigned char [] = {" + ', '.join(map(str,tabIdxFirstSeg)) + "};\n")
+        # f.write ("unsigned char [] = {" + ', '.join(map(str,tabNbLeftClipSeg)) + "};\n")
+        # f.write ("unsigned char [] = {" + ', '.join(map(str,tabNbRightClipSeg)) + "};\n")
+        # f.write ("unsigned char [] = {" + ', '.join(map(str,tabNoClipSeg)) + "};\n")
+        # f.write ("unsigned int  [] = {" + ', '.join(map(str,tabOffset)) + "};\n")
 
 if __name__ == '__main__':
 
