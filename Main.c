@@ -24,10 +24,10 @@
 #define USE_ALTERNATE_CHARSET	                    9		
 #define USE_DOUBLE_SIZE_STANDARD_CHARSET	    10		
 #define USE_DOUBLE_SIZE_ALTERNATE_CHARSET	    11		
-#define USE_BLINKING_STANDARD_CHARSET	            12		
-#define USE_BLINKING_ALTERNATE_CHARSET	            13		
-#define USE_DOUBLE_SIZE_BLINKING_STANDARD_CHARSET   14		
-#define USE_DOUBLE_SIZE_BLINKING_ALTERNATE_CHARSET  15		
+#define USE_DOUBLE_SIZE_BLINKING_STANDARD_CHARSET   12		
+#define USE_DOUBLE_SIZE_BLINKING_ALTERNATE_CHARSET  13		
+#define USE_BLINKING_STANDARD_CHARSET	            14		
+#define USE_BLINKING_ALTERNATE_CHARSET	            15		
 // Change Paper (background) color	
 #define CHANGE_PAPER_TO_BLACK			    16		
 #define CHANGE_PAPER_TO_RED	                    17		
@@ -121,6 +121,7 @@ void prepare_graphics() {
         // poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,SWITCH_TO_TEXT_MODE_50HZ);
         // poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_GREEN);
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_RED);
+        poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+16,USE_STANDARD_CHARSET);
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+17,SWITCH_TO_HIRES_MODE_50HZ);
         for (jj = 0; jj < 8; jj++) {
             poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+24,SWITCH_TO_TEXT_MODE_50HZ);
@@ -210,6 +211,7 @@ void gameLoop() {
         // sY = (SCREEN_HEIGHT - aV) >> 1;
 
         if (isLandscape2BeRedrawn) {
+            // clear Hires Body part
             memset(HIRES_SCREEN_ADDRESS+(5*8*SCREEN_WIDTH), 64, (16-5)*8*SCREEN_WIDTH);
             for (ii=5; ii<=16 ; ii++){
                 for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
@@ -222,9 +224,9 @@ void gameLoop() {
         
 
 
-        if (enemyInRange) {sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+2 , "ENEMY IN RANGE");}
-        if (enemyToLeft) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+2 , "ENEMY TO LEFT");}
-        if (enemyToRight) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+2 , "ENEMY TO RIDHT");}
+        if (enemyInRange) {sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+1 , "\14ENEMY IN RANGE");}
+        if (enemyToLeft) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+1 , "\14ENEMY TO LEFT");}
+        if (enemyToRight) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+1 , "\14ENEMY TO RIDHT");}
         if (nbRemaingLife==3) 
             sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+27 , "ab");
         else 
