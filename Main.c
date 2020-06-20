@@ -62,6 +62,17 @@ extern char OtherPixelY;
 extern void DrawLine8();
 
 
+//
+// ===== circle.s =====
+//
+extern unsigned int CentreX;			// Coordinate X of the circle centre
+extern unsigned int CentreY;			// Coordinate Y of the circle centre
+extern unsigned int Radius;				// Circle radius
+
+extern void circleMidpoint();
+
+
+
 // LANDSCAPE
 extern unsigned int  tabPointsX[];
 extern unsigned char tabPointsY[];
@@ -99,6 +110,30 @@ void change_char(char c, unsigned char patt01, unsigned char patt02, unsigned ch
     *(adr++) = patt06;
     *(adr++) = patt07;
     *(adr++) = patt08;
+}
+// #define ASM_ANGLE_MAX $C0
+// #define ASM_ANGLE_VIEW $E0
+
+// angle of FOV = 0.7854 radians
+
+void drawRadar () {
+    CentreX=126;
+	CentreY=20;
+    Radius=16;
+    circleMidpoint();
+
+    OtherPixelX=CentreX;
+    OtherPixelY=CentreY;
+    CurrentPixelX=OtherPixelX - 5;
+    CurrentPixelY=OtherPixelY - 15;
+    DrawLine8();
+
+    OtherPixelX=CentreX;
+    OtherPixelY=CentreY;
+    CurrentPixelX=OtherPixelX + 5;
+    CurrentPixelY=OtherPixelY - 15;
+    DrawLine8();
+
 }
 
 void drawHorizonLine() {
@@ -296,14 +331,10 @@ void initGame(){
         glCamRotZ = 0;
         prepare_graphics();
 
-        OtherPixelX=120;
-        OtherPixelY=0;
-        CurrentPixelX=120;
-        CurrentPixelY=3*8;
-        DrawLine8();
 
         drawHorizonLine();
 
+        drawRadar ();
 
 }
 

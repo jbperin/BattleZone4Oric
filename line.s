@@ -1,3 +1,5 @@
+; found at http://miniserve.defence-force.org/viewvc/projet1/public/oric/routines/rasterization/
+
 ; History of linebench timings...
 ; without, trivial, worst case, 7331 clipping
 ; 451, 466, 636,  -  (initial version)
