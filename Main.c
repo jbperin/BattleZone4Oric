@@ -82,6 +82,8 @@ unsigned int highScore = 9000;
 unsigned int currentScore = 200;
 unsigned char nbRemaingLife = 3;
 unsigned char isLandscape2BeRedrawn = 1;
+
+
 void player ();
 
 #include "drawLandscape.c"
@@ -286,11 +288,10 @@ void player () {
     }
 }
 
-void main()
-{
-        printf ("debut \n");
-        // get();
+void initGame(){
+
         GenerateTables();
+        glCamRotZ = 0;
         prepare_graphics();
 
         OtherPixelX=120;
@@ -301,24 +302,15 @@ void main()
 
         drawHorizonLine();
 
+
+}
+
+void main()
+{
+
+        initGame();
         gameLoop();
-        // LargeX0=0;
-        // LargeY0=FIRSTLINE;
-        // LargeX1=239;
-        // LargeY1=FIRSTLINE;
-        // DrawClippedLine();
-
-        // LargeX0=-250;
-        // LargeY0=LASTLINE;
-        // LargeX1=400;
-        // LargeY1=LASTLINE;
-        // DrawClippedLine();
-
-
-
-        printf ("fin \n");
-        
-
+      
 }
 
 

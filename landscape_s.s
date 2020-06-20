@@ -52,6 +52,7 @@ _tabPointsX
 	.word 710
 	.word 735
 	.word 743
+	.word 747
 	.word 768
 	.word 776
 	.word 797
@@ -132,6 +133,7 @@ _tabPointsY
 	.byt 45
 	.byt 76
 	.byt 88
+	.byt 62
 	.byt 88
 	.byt 88
 	.byt 61
@@ -176,34 +178,34 @@ _tabSegPt1
 	.byt 18
 	.byt 19
 	.byt 21
-	.byt 23
+	.byt 22
 	.byt 24
-	.byt 26
+	.byt 25
 	.byt 27
 	.byt 28
-	.byt 30
-	.byt 32
+	.byt 29
+	.byt 31
 	.byt 33
 	.byt 34
 	.byt 35
 	.byt 36
-	.byt 38
+	.byt 37
 	.byt 39
-	.byt 41
-	.byt 42
+	.byt 40
 	.byt 42
 	.byt 43
-	.byt 45
-	.byt 47
+	.byt 43
+	.byt 44
+	.byt 46
 	.byt 48
 	.byt 49
 	.byt 50
-	.byt 52
-	.byt 54
+	.byt 51
+	.byt 53
 	.byt 55
 	.byt 56
 	.byt 57
-	.byt 59
+	.byt 58
 	.byt 60
 	.byt 61
 	.byt 62
@@ -211,17 +213,18 @@ _tabSegPt1
 	.byt 64
 	.byt 65
 	.byt 66
-	.byt 68
+	.byt 67
 	.byt 69
 	.byt 70
 	.byt 71
 	.byt 72
-	.byt 74
+	.byt 73
 	.byt 75
-	.byt 77
+	.byt 76
 	.byt 78
 	.byt 79
-	.byt 81
+	.byt 80
+	.byt 82
 _tabSegPt2
 	.byt 1
 	.byt 2
@@ -239,53 +242,54 @@ _tabSegPt2
 	.byt 18
 	.byt 20
 	.byt 22
-	.byt 23
 	.byt 24
+	.byt 23
 	.byt 25
-	.byt 27
-	.byt 29
+	.byt 26
+	.byt 28
 	.byt 30
 	.byt 31
-	.byt 33
+	.byt 32
 	.byt 34
 	.byt 35
 	.byt 36
 	.byt 37
-	.byt 39
+	.byt 38
 	.byt 40
-	.byt 42
+	.byt 41
 	.byt 43
 	.byt 44
-	.byt 46
+	.byt 45
 	.byt 47
 	.byt 48
 	.byt 49
-	.byt 51
+	.byt 50
 	.byt 52
 	.byt 53
-	.byt 55
+	.byt 54
 	.byt 56
 	.byt 57
 	.byt 58
-	.byt 60
+	.byt 59
 	.byt 61
 	.byt 62
 	.byt 63
 	.byt 64
 	.byt 65
-	.byt 67
+	.byt 66
 	.byt 68
 	.byt 69
 	.byt 70
 	.byt 71
 	.byt 72
 	.byt 73
-	.byt 75
+	.byt 74
 	.byt 76
-	.byt 78
-	.byt 80
+	.byt 77
+	.byt 79
 	.byt 81
-	.byt 83
+	.byt 82
+	.byt 84
 _tabIdxFirstSeg
 	.byt 0
 	.byt 1
@@ -310,13 +314,13 @@ _tabIdxFirstSeg
 	.byt 14
 	.byt 15
 	.byt 16
-	.byt 17
+	.byt 16
 	.byt 18
 	.byt 19
 	.byt 19
-	.byt 19
-	.byt 19
-	.byt 19
+	.byt 20
+	.byt 20
+	.byt 20
 	.byt 20
 	.byt 21
 	.byt 23
@@ -324,33 +328,33 @@ _tabIdxFirstSeg
 	.byt 24
 	.byt 26
 	.byt 28
-	.byt 28
 	.byt 29
-	.byt 30
+	.byt 29
+	.byt 31
 	.byt 31
 	.byt 32
-	.byt 33
+	.byt 34
 	.byt 35
 	.byt 35
 	.byt 36
 	.byt 37
-	.byt 37
 	.byt 38
-	.byt 39
+	.byt 38
 	.byt 40
-	.byt 40
+	.byt 41
 	.byt 41
 	.byt 42
 	.byt 43
 	.byt 44
-	.byt 44
-	.byt 44
-	.byt 44
-	.byt 44
+	.byt 45
+	.byt 45
+	.byt 45
 	.byt 45
 	.byt 45
 	.byt 46
 	.byt 46
+	.byt 47
+	.byt 47
 _tabNbLeftClipSeg
 	.byt 0
 	.byt 1
@@ -374,33 +378,33 @@ _tabNbLeftClipSeg
 	.byt 2
 	.byt 1
 	.byt 1
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 0
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 0
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 2
-	.byt 2
 	.byt 2
 	.byt 1
 	.byt 1
 	.byt 1
 	.byt 1
+	.byt 0
+	.byt 0
+	.byt 0
+	.byt 1
 	.byt 2
 	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 0
+	.byt 1
+	.byt 0
+	.byt 1
+	.byt 2
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 2
 	.byt 1
 	.byt 0
 	.byt 1
@@ -424,32 +428,32 @@ _tabNbRightClipSeg
 	.byt 1
 	.byt 2
 	.byt 2
-	.byt 1
-	.byt 1
-	.byt 0
-	.byt 0
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 1
-	.byt 2
-	.byt 1
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 0
-	.byt 1
-	.byt 1
-	.byt 0
-	.byt 2
 	.byt 2
 	.byt 1
 	.byt 1
 	.byt 1
 	.byt 1
+	.byt 0
+	.byt 0
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 0
+	.byt 1
+	.byt 1
 	.byt 1
 	.byt 2
 	.byt 2
+	.byt 2
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
+	.byt 1
 	.byt 1
 	.byt 1
 	.byt 1
@@ -494,21 +498,21 @@ _tabNoClipSeg
 	.byt 11
 	.byt 10
 	.byt 10
+	.byt 10
 	.byt 9
-	.byt 8
 	.byt 9
-	.byt 9
+	.byt 10
 	.byt 11
 	.byt 11
 	.byt 11
 	.byt 11
 	.byt 13
-	.byt 12
-	.byt 12
+	.byt 13
+	.byt 11
+	.byt 13
 	.byt 12
 	.byt 12
 	.byt 13
-	.byt 14
 	.byt 14
 	.byt 15
 	.byt 15
@@ -516,20 +520,20 @@ _tabNoClipSeg
 	.byt 15
 	.byt 14
 	.byt 16
+	.byt 15
+	.byt 14
+	.byt 12
+	.byt 13
 	.byt 14
 	.byt 13
-	.byt 12
-	.byt 12
 	.byt 13
-	.byt 12
 	.byt 11
 	.byt 10
 	.byt 9
+	.byt 9
+	.byt 9
+	.byt 9
 	.byt 8
-	.byt 8
-	.byt 8
-	.byt 8
-	.byt 7
 	.byt 8
 	.byt 8
 	.byt 9

@@ -14,7 +14,7 @@
 // extern unsigned int  tabOffset[];
 
 
-signed char glCamRotZ=12;
+signed char glCamRotZ=40;
 unsigned char CurrentPixelX, CurrentPixelY, OtherPixelX, OtherPixelY;
 int LargeX0, LargeY0, LargeX1, LargeY1;
 
