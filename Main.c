@@ -86,6 +86,7 @@ extern unsigned int  tabOffset[];
 
 
 char inGame = 1;
+unsigned char debugOn = 0;
 unsigned char enemyInRange = 0;
 unsigned char enemyToLeft = 0;
 unsigned char enemyToRight = 0;
@@ -94,7 +95,9 @@ unsigned int currentScore = 200;
 unsigned char nbRemaingLife = 3;
 unsigned char isLandscape2BeRedrawn = 1;
 
-
+void revertDebug(){
+    debugOn = (debugOn==0)?1:0;
+}
 void player ();
 
 #include "drawLandscape.c"
@@ -286,7 +289,7 @@ void gameLoop() {
         sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+28 , "HI SCR  %d",highScore);
         sprintf (LORES_SCREEN_ADDRESS+(3*SCREEN_WIDTH)+28 , "SCORE   %d",currentScore);
 
-        // sprintf(ADR_BASE_SCREEN, "(X=%d Y=%d Z=%d) [%d %d]", glCamPosX, glCamPosY, glCamPosZ, glCamRotZ, glCamRotX);
+        if (debugOn) sprintf(ADR_BASE_SCREEN, "(X=%d Y=%d Z=%d) [%d %d]", glCamPosX, glCamPosY, glCamPosZ, glCamRotZ, glCamRotX);
     }
 }
 
@@ -312,6 +315,8 @@ void player () {
         backward(); break;
     case 11:  // up
         forward(); break;
+    case 68:  // D
+        revertDebug(); break;
     case 81:  // Q
         inGame = 0; break;
     default:
