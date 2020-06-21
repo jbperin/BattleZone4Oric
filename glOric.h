@@ -23,8 +23,6 @@
 
 #define GLORIC_VERSION 13
 
-#define SCREEN_WIDTH            40
-#define SCREEN_HEIGHT           26
 #define ADR_BASE_SCREEN         48000 
 #define HIRES_SCREEN_ADDRESS    0xA000
 

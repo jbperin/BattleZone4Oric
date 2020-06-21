@@ -47,7 +47,7 @@
 ;; -------- USAGE MODE --------------
 ;; use COLORDEMO for color usage
 ;; use LRSDEMO for black and white usage
-; #define COLORDEMO 
+#define LRSDEMO 
 
 ;; -------- PATCHED CODE ------------
 ;; Bresenham code can be dynamically patched 
@@ -109,8 +109,10 @@
 
 ;; -------- VIEWPORT SIZING --------------
 
-#define SCREEN_WIDTH 40
-#define SCREEN_HEIGHT 26
+; #define SCREEN_WIDTH 40
+; #define SCREEN_HEIGHT 26
+#define SCREEN_WIDTH 240
+#define SCREEN_HEIGHT 200
 
 
 ;;============================================

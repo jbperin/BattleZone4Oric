@@ -100,6 +100,8 @@ void revertDebug(){
 }
 void player ();
 
+#include "lrs.c"
+
 #include "drawLandscape.c"
 
 void change_char(char c, unsigned char patt01, unsigned char patt02, unsigned char patt03, unsigned char patt04, unsigned char patt05, unsigned char patt06, unsigned char patt07, unsigned char patt08) {
@@ -243,15 +245,6 @@ void gameLoop() {
 
         player ();
 
-        // // project 3D points to 2D coordinates
-        // glProjectArrays();
-
-        // // demonstrate use of glProjectPoint and glZPlot to interact with glOric inner functions
-        // // display a sprite at a given position
-        // pX=0; pY=0; pZ=24;
-        // glProjectPoint(pX, pY, pZ, 0, &aH, &aV , &distance);
-        // sX = (SCREEN_WIDTH -aH) >> 1;
-        // sY = (SCREEN_HEIGHT - aV) >> 1;
 
         if (isLandscape2BeRedrawn) {
             // clear Hires Body part
@@ -265,6 +258,8 @@ void gameLoop() {
             isLandscape2BeRedrawn = 0;
         }
         
+        glProject (ptsCube2D, ptsCube3D, NB_POINTS_CUBE, 0);
+        drawCube ();
 
 
         if (enemyInRange) {sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+1 , "\14ENEMY IN RANGE");}
@@ -337,7 +332,15 @@ unsigned char S_to_binary_(const char *s)
 void initGame(){
 
         GenerateTables();
-        glCamRotZ = 0;
+
+        glCamPosX = -12;
+        glCamPosY = 0;
+        glCamPosZ = 0;
+
+        // Camera Orientation
+        glCamRotZ = 0;  // -128 -> 127 unit : 2PI/(2^8 - 1)
+        glCamRotX = 0;
+
         prepare_graphics();
 
 // 000001100000000000000000
@@ -397,10 +400,8 @@ void initGame(){
 
 void main()
 {
-
         initGame();
         gameLoop();
-      
 }
 
 
