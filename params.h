@@ -22,7 +22,7 @@
 
 #define CLIP_LEFT	5
 #define CLIP_RIGHT	220
-#define CLIP_TOP	5
-#define CLIP_BOTTOM	160
+#define CLIP_TOP	40
+#define CLIP_BOTTOM	135
 
 #define USE_ACCURATE_CLIPPING

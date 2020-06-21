@@ -24,6 +24,10 @@
 
 #include "params.h"
 
+#define CLIP_CIRCLE_LEFT	5
+#define CLIP_CIRCLE_RIGHT	220
+#define CLIP_CIRCLE_TOP	5
+#define CLIP_CIRCLE_BOTTOM	160
 
 	.zero
 
@@ -62,7 +66,7 @@ _circleMidpoint
 	tay
 	lda _CentreX+1
 	adc _Radius+1
-	cpy #(CLIP_LEFT)
+	cpy #(CLIP_CIRCLE_LEFT)
 	sbc #0
 .(
 	bvc ret
@@ -79,7 +83,7 @@ ret
 	tay
     lda _CentreX+1
     sbc _Radius+1
-    cpy #(CLIP_RIGHT-1)
+    cpy #(CLIP_CIRCLE_RIGHT-1)
     sbc #0
 .(
     bvc ret ; N eor V
@@ -96,7 +100,7 @@ ret
 	tay
 	lda _CentreY+1
     adc _Radius+1
-    cpy #(CLIP_TOP)
+    cpy #(CLIP_CIRCLE_TOP)
     sbc #0
 .(
     bvc ret ; N eor V
@@ -113,7 +117,7 @@ ret
 	tay
     lda _CentreY+1
     sbc _Radius+1
-    cpy #(CLIP_BOTTOM-1)
+    cpy #(CLIP_CIRCLE_BOTTOM-1)
     sbc #0
 .(
     bvc ret ; N eor V
@@ -344,9 +348,9 @@ _circlePoints
 	lda cypy+1
 	bne end_line_1
     ldy cypy 
-    cpy #(CLIP_BOTTOM)
+    cpy #(CLIP_CIRCLE_BOTTOM)
 	bcs end_line_1
-    cpy #(CLIP_TOP)
+    cpy #(CLIP_CIRCLE_TOP)
 	bcc end_line_1
 
     lda _HiresAddrLow,y			; 4
@@ -359,9 +363,9 @@ _circlePoints
     lda cxpx+1
 	bne end
     ldx cxpx
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -377,9 +381,9 @@ end
     lda cxmx+1
 	bne end
     ldx cxmx	
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -395,9 +399,9 @@ end_line_1
     lda cymy+1
 	bne end_line_2	
     ldy cymy
-    cpy #(CLIP_BOTTOM)
+    cpy #(CLIP_CIRCLE_BOTTOM)
 	bcs end_line_2
-    cpy #(CLIP_TOP)
+    cpy #(CLIP_CIRCLE_TOP)
 	bcc end_line_2
     
     lda _HiresAddrLow,y			; 4
@@ -410,9 +414,9 @@ end_line_1
     lda cxmx+1
 	bne end
     ldx cxmx
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -428,9 +432,9 @@ end
    	lda cxpx+1
 	bne end
     ldx cxpx
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -447,9 +451,9 @@ end_line_2
     lda cypx+1
 	bne end_line_3
     ldy cypx
-    cpy #(CLIP_BOTTOM)
+    cpy #(CLIP_CIRCLE_BOTTOM)
 	bcs end_line_3
-    cpy #(CLIP_TOP)
+    cpy #(CLIP_CIRCLE_TOP)
 	bcc end_line_3
 	
     lda _HiresAddrLow,y			; 4
@@ -462,9 +466,9 @@ end_line_2
     lda cxpy+1
 	bne end
     ldx cxpy
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -480,9 +484,9 @@ end
     lda cxmy+1
 	bne end
     ldx cxmy
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -500,9 +504,9 @@ skip6
     lda cymx+1
 	bne end_line_4
     ldy cymx
-    cpy #(CLIP_BOTTOM)
+    cpy #(CLIP_CIRCLE_BOTTOM)
 	bcs end_line_4
-    cpy #(CLIP_TOP)
+    cpy #(CLIP_CIRCLE_TOP)
 	bcc end_line_4
 	
     lda _HiresAddrLow,y			; 4
@@ -515,9 +519,9 @@ skip6
     lda cxmy+1
 	bne end
     ldx cxmy
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
@@ -532,9 +536,9 @@ end
     lda cxpy+1
 	bne end
     ldx cxpy
-	cpx #(CLIP_RIGHT)
+	cpx #(CLIP_CIRCLE_RIGHT)
 	bcs end
-	cpx #(CLIP_LEFT)
+	cpx #(CLIP_CIRCLE_LEFT)
 	bcc end
 
   	ldy _TableDiv6,x
