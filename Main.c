@@ -48,6 +48,14 @@
 #define LASTLINE 135
 #define HORIZONLINE (FIRSTLINE+LASTLINE)/2
 
+/*
+ * VISIBILITY LIMITS
+ */
+#define ANGLE_MAX 0xC0
+#define ANGLE_VIEW 0xE0
+
+
+#define abs(x)                 (((x)<0)?-(x):(x))
 
 extern int LargeX0;
 extern int LargeY0;
@@ -94,6 +102,7 @@ unsigned int highScore = 9000;
 unsigned int currentScore = 200;
 unsigned char nbRemaingLife = 3;
 unsigned char isLandscape2BeRedrawn = 1;
+unsigned char isScene2BeRedrawn = 1;
 
 void revertDebug(){
     debugOn = (debugOn==0)?1:0;
@@ -246,9 +255,9 @@ void gameLoop() {
         player ();
 
 
-        if (isLandscape2BeRedrawn) {
+        if (isLandscape2BeRedrawn || isScene2BeRedrawn) {
             // clear Hires Body part
-            memset(HIRES_SCREEN_ADDRESS+(5*8*SCREEN_WIDTH), 64, (16-5)*8*SCREEN_WIDTH);
+            memset(HIRES_SCREEN_ADDRESS+(5*8*SCREEN_WIDTH), 64, (17-5)*8*SCREEN_WIDTH);
             for (ii=5; ii<=16 ; ii++){
                 for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
             }
@@ -256,11 +265,14 @@ void gameLoop() {
             drawLandscape ();
             drawHorizonLine();
             isLandscape2BeRedrawn = 0;
+            
+            glProject (ptsCube2D, ptsCube3D, NB_POINTS_CUBE, 0);
+            //drawCube ();
+            drawSegments (segCube3D, ptsCube2D, NB_SEGMENTS_CUBE );
+
+            isScene2BeRedrawn = 0;
         }
         
-        glProject (ptsCube2D, ptsCube3D, NB_POINTS_CUBE, 0);
-        drawCube ();
-
 
         if (enemyInRange) {sprintf (LORES_SCREEN_ADDRESS+(1*SCREEN_WIDTH)+1 , "\14ENEMY IN RANGE");}
         if (enemyToLeft) {sprintf (LORES_SCREEN_ADDRESS+(2*SCREEN_WIDTH)+1 , "\14ENEMY TO LEFT");}
@@ -303,13 +315,13 @@ void shiftRight();
 void player () {
     switch (key()) {
     case 8:  // left 
-        glCamRotZ -= 4; isLandscape2BeRedrawn = 1;break;
+        glCamRotZ -= 4; isScene2BeRedrawn = 1;isLandscape2BeRedrawn = 1;break;
     case 9:  // right 
-        glCamRotZ += 4; isLandscape2BeRedrawn = 1;break;
+        glCamRotZ += 4; isScene2BeRedrawn = 1;isLandscape2BeRedrawn = 1;break;
     case 10:  // down
-        backward(); break;
+        backward(); isScene2BeRedrawn = 1;break;
     case 11:  // up
-        forward(); break;
+        forward(); isScene2BeRedrawn = 1;break;
     case 68:  // D
         revertDebug(); break;
     case 81:  // Q
@@ -333,12 +345,12 @@ void initGame(){
 
         GenerateTables();
 
-        glCamPosX = -12;
-        glCamPosY = 0;
-        glCamPosZ = 0;
+        glCamPosX = -20;
+        glCamPosY = 17;
+        glCamPosZ = 2;
 
         // Camera Orientation
-        glCamRotZ = 0;  // -128 -> 127 unit : 2PI/(2^8 - 1)
+        glCamRotZ = -68;  // -128 -> 127 unit : 2PI/(2^8 - 1)
         glCamRotX = 0;
 
         prepare_graphics();
@@ -395,13 +407,124 @@ void initGame(){
         drawHorizonLine();
 
         drawRadar ();
-
 }
+#ifdef AUTOTEST
+void test() {
+
+    int ii, jj;
+    signed char aH, aV;
+    signed char aH1, aV1, aH2, aV2;
+    unsigned char idxPt1, idxPt2;
+    signed char   tmpH, tmpV;
+    unsigned char m1, m2;
+    unsigned char v1, v2;
+    unsigned char isSegment2BeDrawn;
+
+    text();
+    cls();
+
+    glCamPosX = 16;
+    glCamPosY = 2;
+    glCamPosZ = 2;
+
+    // Camera Orientation
+    glCamRotZ = 0;  // -128 -> 127 unit : 2PI/(2^8 - 1)
+    glCamRotX = 0;
+
+    glProject (ptsCube2D, ptsCube3D, NB_POINTS_CUBE, 0);
+
+    for (ii=0; ii < NB_POINTS_CUBE; ii++) {
+
+        aH=ptsCube2D[ii*SIZEOF_2DPOINT+0];
+        aV=ptsCube2D[ii*SIZEOF_2DPOINT+1];
+
+        LargeX0= 120  + (int)(aH)*4;
+        LargeY0= HORIZONLINE - (int)(aV)*4;
+
+        printf ("[%d %d %d]=> (%d %d)=> [%d %d]\n",
+            ptsCube3D[ii*SIZEOF_3DPOINT+0], ptsCube3D[ii*SIZEOF_3DPOINT+1], ptsCube3D[ii*SIZEOF_3DPOINT+2], 
+            aH, aV, 
+            LargeX0, LargeY0
+        );
+    }
+    get ();
+    // cls();
+
+    for (jj=0; jj < NB_SEGMENTS_CUBE; jj++) {
+
+        idxPt1 = segCube3D[jj*2+0];
+        idxPt2 = segCube3D[jj*2+1];
+
+        aH1=ptsCube2D[idxPt1*SIZEOF_2DPOINT+0];
+        aV1=ptsCube2D[idxPt1*SIZEOF_2DPOINT+1];
+        aH2=ptsCube2D[idxPt2*SIZEOF_2DPOINT+0];
+        aV2=ptsCube2D[idxPt2*SIZEOF_2DPOINT+1];
+
+
+        if (abs(aH2) < abs(aH1)) {
+            tmpH = aH1;
+            tmpV = aV1;
+            aH1 = aH2;
+            aV1 = aV2;
+            aH2 = tmpH;
+            aV2 = tmpV;
+        }
+
+        m1 = aH1 & ANGLE_MAX;
+        m2 = aH2 & ANGLE_MAX;
+        v1 = aH1 & ANGLE_VIEW;
+        v2 = aH2 & ANGLE_VIEW;
+
+        isSegment2BeDrawn = 0;
+        if ((m1 == 0x00) || (m1 == ANGLE_MAX)) {
+            if ((v1 == 0x00) || (v1 == ANGLE_VIEW)) {
+                if((aH1 & 0x80) != (aH2 & 0x80)) {
+                    if ((abs(aH2) < 127 - abs(aH1))) {
+                        isSegment2BeDrawn = 1;
+                    }
+                }else {
+                    isSegment2BeDrawn = 1;
+                }
+            }else{
+                // P1 FRONT
+                if ((m2 == 0x00) || (m2 == ANGLE_MAX)) {
+                    // P2 FRONT
+                    isSegment2BeDrawn = 1;
+                } else {
+                    // P2 BACK
+                    if ((aH1 & 0x80) != (aH2 & 0x80)) {
+                        if (abs(aH2) < 127 - abs(aH1)) {
+                            isSegment2BeDrawn=1;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        LargeX0= 120  + (int)(aH1)*4;
+        LargeY0= HORIZONLINE - (int)(aV1)*4;
+        LargeX1= 120  + (int)(aH2)*4;
+        LargeY1= HORIZONLINE - (int)(aV2)*4;
+
+        printf ("%d=>%d, [%d %d]=>[%d %d] %d\n",
+             idxPt1, idxPt2
+            ,LargeX0, LargeY0
+            ,LargeX1, LargeY1
+            ,isSegment2BeDrawn
+        );  
+    }
+    get();
+}
+#endif
 
 void main()
 {
-        initGame();
-        gameLoop();
+#ifdef AUTOTEST
+    test();
+#endif
+    initGame();
+    gameLoop();
 }
 
 
