@@ -43,10 +43,12 @@
 #define SWITCH_TO_HIRES_MODE_60HZ	            28		
 #define SWITCH_TO_HIRES_MODE_50HZ                   30		
 
-
+// Shall match CLIP_TOP
 #define FIRSTLINE 40
-#define LASTLINE 135
-#define HORIZONLINE (FIRSTLINE+LASTLINE)/2
+// Shale match CLIP_BOTTOM
+#define LASTLINE 128
+
+#define HORIZONLINE 88
 
 /*
  * VISIBILITY LIMITS
@@ -161,7 +163,7 @@ void drawHorizonLine() {
 void prepare_graphics() {
     int ii, jj;
     
-    memset(HIRES_SCREEN_ADDRESS, 64, 5500);
+    memset(HIRES_SCREEN_ADDRESS, 64, 5120); // 5120 = 0xB400 (std char) - 0xA000 (hires screen)
     memset(LORES_SCREEN_ADDRESS, 32, 40*25);
 
     poke (LORES_SCREEN_ADDRESS,SWITCH_TO_TEXT_MODE_50HZ);
@@ -176,7 +178,7 @@ void prepare_graphics() {
             poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+24,SWITCH_TO_TEXT_MODE_50HZ);
         }
     }
-    for (ii=5; ii<=16 ; ii++){
+    for (ii=5; ii<16 ; ii++){
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+0,CHANGE_INK_TO_GREEN);
         poke (LORES_SCREEN_ADDRESS+(ii*SCREEN_WIDTH)+1,SWITCH_TO_HIRES_MODE_50HZ);
         for (jj = 0; jj < 8; jj++) {
@@ -257,8 +259,8 @@ void gameLoop() {
 
         if (isLandscape2BeRedrawn || isScene2BeRedrawn) {
             // clear Hires Body part
-            memset(HIRES_SCREEN_ADDRESS+(5*8*SCREEN_WIDTH), 64, (17-5)*8*SCREEN_WIDTH);
-            for (ii=5; ii<=16 ; ii++){
+            memset(HIRES_SCREEN_ADDRESS+(FIRSTLINE*SCREEN_WIDTH), 64, (8*12)*SCREEN_WIDTH); // FIXME .. should be 8*11*SCREEN_WIDTH
+            for (ii=5; ii<16 ; ii++){
                 for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
             }
 
