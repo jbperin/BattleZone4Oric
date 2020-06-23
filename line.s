@@ -30,6 +30,13 @@
 #define _SEC        $38
 
 
+#ifdef USE_BUFFERED_SCREEN
+    .bss
+* = $_ADR_SCREEN_BUFFER    
+hires_screen_buffer .dsb 8000
+    .text
+#endif
+
     .zero
 
 ; 5 bytes for point 0
@@ -860,9 +867,9 @@ _patch_bit2
     bmi nextColumn          ; 2/10.05   16.7% taken
 contColumn
 _patch_ptr0
-    OPP $a000,y             ; 4
+    OPP $_ADR_DRAWING,y             ; 4
 _patch_ptr1
-    sta $a000,y             ; 5 = 16.34
+    sta $_ADR_DRAWING,y             ; 5 = 16.34
 
     dex                     ; 2         Step in x
     beq exitLoop            ; 2/3       At the endpoint yet?
@@ -1199,9 +1206,9 @@ loopY
 loopX
     ; Draw the pixel
 _patch_ptr0
-    OPP $a000,y             ; 4
+    OPP $_ADR_DRAWING,y             ; 4
 _patch_ptr1
-    sta $a000,y             ; 5 =  9
+    sta $_ADR_DRAWING,y             ; 5 =  9
 ; update the screen address:
     tya                     ; 2
 _patch_adc1
@@ -1398,9 +1405,9 @@ _GenerateTables
 
     ; Generate screen offset data
 .(
-    lda #<$a000
+    lda #<$_ADR_DRAWING
     sta tmp0+0
-    lda #>$a000
+    lda #>$_ADR_DRAWING
     sta tmp0+1
 
     ldx #0

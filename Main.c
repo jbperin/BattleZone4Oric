@@ -2,6 +2,7 @@
 #include <lib.h>
 
 #include "glOric.h"
+#include "params.h"
 
 #define SCREEN_WIDTH                    40
 #define SCREEN_HEIGHT                   26
@@ -189,6 +190,13 @@ void prepare_graphics() {
     poke (LORES_SCREEN_ADDRESS+(25*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
     poke (LORES_SCREEN_ADDRESS+(26*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
     poke (LORES_SCREEN_ADDRESS+(27*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
+
+#ifdef USE_BUFFERED_SCREEN
+    // Save screen config and low part of char table 
+    memcpy((void *) ADR_DRAWING,(void *)HIRES_SCREEN_ADDRESS, 8000);
+    // COPY_2_SCREEN;
+    memcpy((void *) HIRES_SCREEN_ADDRESS,(void *)ADR_DRAWING,8000);
+#endif
 }
 
 unsigned char isAllowedPosition(signed char X, signed char Y, signed char Z) {
@@ -259,9 +267,9 @@ void gameLoop() {
 
         if (isLandscape2BeRedrawn || isScene2BeRedrawn) {
             // clear Hires Body part
-            memset(HIRES_SCREEN_ADDRESS+(FIRSTLINE*SCREEN_WIDTH), 64, (8*12)*SCREEN_WIDTH); // FIXME .. should be 8*11*SCREEN_WIDTH
+            memset(ADR_DRAWING+(FIRSTLINE*SCREEN_WIDTH), 64, (8*12)*SCREEN_WIDTH); // FIXME .. should be 8*11*SCREEN_WIDTH
             for (ii=5; ii<16 ; ii++){
-                for (jj = 0; jj < 8; jj++) poke (HIRES_SCREEN_ADDRESS+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
+                for (jj = 0; jj < 8; jj++) poke (ADR_DRAWING+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
             }
 
             drawLandscape ();
@@ -272,6 +280,10 @@ void gameLoop() {
             //drawCube ();
             drawSegments (segCube3D, ptsCube2D, NB_SEGMENTS_CUBE );
 
+#ifdef USE_BUFFERED_SCREEN
+            // COPY_2_SCREEN;
+            memcpy((void *) (HIRES_SCREEN_ADDRESS+(FIRSTLINE*SCREEN_WIDTH)),(void *)(ADR_DRAWING+(FIRSTLINE*SCREEN_WIDTH)),(8*12)*SCREEN_WIDTH);// FIXME .. should be 8*11*SCREEN_WIDTH
+#endif
             isScene2BeRedrawn = 0;
         }
         
@@ -355,7 +367,6 @@ void initGame(){
         glCamRotZ = -68;  // -128 -> 127 unit : 2PI/(2^8 - 1)
         glCamRotX = 0;
 
-        prepare_graphics();
 
 // 000001100000000000000000
 // 00000011000000000000000000
@@ -405,6 +416,8 @@ void initGame(){
             B(00100000),
             B(00000000) 
         );
+
+        prepare_graphics();
 
         drawHorizonLine();
 
