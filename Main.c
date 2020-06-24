@@ -4,8 +4,6 @@
 #include "glOric.h"
 #include "params.h"
 
-#define SCREEN_WIDTH                    40
-#define SCREEN_HEIGHT                   26
 #define LORES_SCREEN_ADDRESS            0xBB80 
 #define HIRES_SCREEN_ADDRESS            0xA000
 #define STANDARD_CHARSET_ADDRESS        0xB400
@@ -45,9 +43,9 @@
 #define SWITCH_TO_HIRES_MODE_50HZ                   30		
 
 // Shall match CLIP_TOP
-#define FIRSTLINE 40
+#define FIRSTLINE CLIP_TOP
 // Shale match CLIP_BOTTOM
-#define LASTLINE 128
+#define LASTLINE CLIP_BOTTOM
 
 #define HORIZONLINE 88
 
@@ -72,7 +70,11 @@ extern char OtherPixelX;
 extern char OtherPixelY;
 extern void DrawLine8();
 
-
+//
+// ===== screen.s =====
+//
+extern void ScreenCopyHires();
+extern void HiresClear();
 //
 // ===== circle.s =====
 //
@@ -191,12 +193,6 @@ void prepare_graphics() {
     poke (LORES_SCREEN_ADDRESS+(26*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
     poke (LORES_SCREEN_ADDRESS+(27*SCREEN_WIDTH)+0,CHANGE_PAPER_TO_BLACK);
 
-#ifdef USE_BUFFERED_SCREEN
-    // Save screen config and low part of char table 
-    memcpy((void *) ADR_DRAWING,(void *)HIRES_SCREEN_ADDRESS, 8000);
-    // COPY_2_SCREEN;
-    memcpy((void *) HIRES_SCREEN_ADDRESS,(void *)ADR_DRAWING,8000);
-#endif
 }
 
 unsigned char isAllowedPosition(signed char X, signed char Y, signed char Z) {
@@ -267,7 +263,7 @@ void gameLoop() {
 
         if (isLandscape2BeRedrawn || isScene2BeRedrawn) {
             // clear Hires Body part
-            memset(ADR_DRAWING+(FIRSTLINE*SCREEN_WIDTH), 64, (8*12)*SCREEN_WIDTH); // FIXME .. should be 8*11*SCREEN_WIDTH
+            HiresClear();
             for (ii=5; ii<16 ; ii++){
                 for (jj = 0; jj < 8; jj++) poke (ADR_DRAWING+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
             }
@@ -281,8 +277,7 @@ void gameLoop() {
             drawSegments (segCube3D, ptsCube2D, NB_SEGMENTS_CUBE );
 
 #ifdef USE_BUFFERED_SCREEN
-            // COPY_2_SCREEN;
-            memcpy((void *) (HIRES_SCREEN_ADDRESS+(FIRSTLINE*SCREEN_WIDTH)),(void *)(ADR_DRAWING+(FIRSTLINE*SCREEN_WIDTH)),(8*12)*SCREEN_WIDTH);// FIXME .. should be 8*11*SCREEN_WIDTH
+            ScreenCopyHires();
 #endif
             isScene2BeRedrawn = 0;
         }
@@ -357,15 +352,15 @@ unsigned char S_to_binary_(const char *s)
 }
 void initGame(){
 
-        GenerateTables();
+    GenerateTables();
 
-        glCamPosX = -20;
-        glCamPosY = 17;
-        glCamPosZ = 2;
+    glCamPosX = -20;
+    glCamPosY = 17;
+    glCamPosZ = 2;
 
-        // Camera Orientation
-        glCamRotZ = -68;  // -128 -> 127 unit : 2PI/(2^8 - 1)
-        glCamRotX = 0;
+    // Camera Orientation
+    glCamRotZ = -68;  // -128 -> 127 unit : 2PI/(2^8 - 1)
+    glCamRotX = 0;
 
 
 // 000001100000000000000000
@@ -376,52 +371,60 @@ void initGame(){
 // 000001111111111111100000
 // 000010010000000010010000
 // 000001111111111111100000
-        change_char('a', 
-            B(00000001), 
-            B(00000000), 
-            B(00000000), 
-            B(00000000), 
-            B(00000001), 
-            B(00000010), 
-            B(00000001),
-            B(00000000) 
-        );
-        change_char('b', 
-            B(00110000), 
-            B(00011100), 
-            B(00000111), 
-            B(00000100), 
-            B(00111111), 
-            B(00010000), 
-            B(00111111),
-            B(00000000) 
-        );
-        change_char('c', 
-            B(00000000), 
-            B(00000000), 
-            B(00111100), 
-            B(00000100), 
-            B(00111111), 
-            B(00000010), 
-            B(00111111),
-            B(00000000) 
-        );
-        change_char('d', 
-            B(00000000), 
-            B(00000000), 
-            B(00000000), 
-            B(00000000), 
-            B(00100000), 
-            B(00010000), 
-            B(00100000),
-            B(00000000) 
-        );
+    change_char('a', 
+        B(00000001), 
+        B(00000000), 
+        B(00000000), 
+        B(00000000), 
+        B(00000001), 
+        B(00000010), 
+        B(00000001),
+        B(00000000) 
+    );
+    change_char('b', 
+        B(00110000), 
+        B(00011100), 
+        B(00000111), 
+        B(00000100), 
+        B(00111111), 
+        B(00010000), 
+        B(00111111),
+        B(00000000) 
+    );
+    change_char('c', 
+        B(00000000), 
+        B(00000000), 
+        B(00111100), 
+        B(00000100), 
+        B(00111111), 
+        B(00000010), 
+        B(00111111),
+        B(00000000) 
+    );
+    change_char('d', 
+        B(00000000), 
+        B(00000000), 
+        B(00000000), 
+        B(00000000), 
+        B(00100000), 
+        B(00010000), 
+        B(00100000),
+        B(00000000) 
+    );
 
-        prepare_graphics();
+    prepare_graphics();
 
-        drawHorizonLine();
+#ifdef USE_BUFFERED_SCREEN
+    // Save screen config and low part of char table 
+    memcpy((void *) ADR_DRAWING,(void *)HIRES_SCREEN_ADDRESS, 8000);
+    drawRadar ();
+    // COPY_2_SCREEN;
+    memcpy((void *) HIRES_SCREEN_ADDRESS,(void *)ADR_DRAWING,8000);
+#else
+    drawRadar ();
+#endif
+    drawHorizonLine();
 
-        drawRadar ();
 }
 #ifdef AUTOTEST
 void test() {

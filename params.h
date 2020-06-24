@@ -1,23 +1,5 @@
 
 #define CLIP_BORDER	1
-//40
-
-//#define CLIP_LEFT	(CLIP_BORDER)
-//#define CLIP_RIGHT	(239-CLIP_BORDER)
-//#define CLIP_TOP	(CLIP_BORDER)
-//#define CLIP_BOTTOM	(199-CLIP_BORDER)
-
-//#define CLIP_LEFT	(CLIP_BORDER)
-//#define CLIP_RIGHT	(239-CLIP_BORDER)
-//#define CLIP_TOP	100
-//#define CLIP_BOTTOM	(199-CLIP_BORDER)
-
-
-//#define CLIP_LEFT	0
-//#define CLIP_TOP	100
-
-//#define CLIP_RIGHT	239
-//#define CLIP_BOTTOM	199
 
 
 #define CLIP_LEFT	5
@@ -27,6 +9,9 @@
 
 #define USE_ACCURATE_CLIPPING
 #define USE_BUFFERED_SCREEN
+
+#define SCREEN_WIDTH                    40
+#define SCREEN_HEIGHT                   26
 
 #define _ADR_SCREEN_BUFFER 7800
 #define _ADR_SCREEN_MEMORY a000

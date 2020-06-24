@@ -10,7 +10,7 @@
 #include "params.h"
 
 
-#define OPP         EOR
+#define OPP         ORA
 
 #define BYTE_PIXEL  6
 #define X_SIZE      240
@@ -30,12 +30,7 @@
 #define _SEC        $38
 
 
-#ifdef USE_BUFFERED_SCREEN
-    .bss
-* = $_ADR_SCREEN_BUFFER    
-hires_screen_buffer .dsb 8000
-    .text
-#endif
+
 
     .zero
 
