@@ -1,5 +1,5 @@
 
-#define CUBE_SIZE				3
+#define CUBE_SIZE				12
 #define NB_POINTS_CUBE			8
 #define NB_SEGMENTS_CUBE		12
 
@@ -32,6 +32,29 @@ unsigned char segCube3D[]={
 char ptsCube2D [NB_POINTS_CUBE	* SIZEOF_2DPOINT];
 
 
+#define NB_POINTS_PYRAMID		5
+#define NB_SEGMENTS_PYRAMID		8
+
+char ptsPyramid3D[]={
+	 -CUBE_SIZE+30, -CUBE_SIZE+30,           0, 0// -CUBE_SIZE, 0 // P1
+	,+CUBE_SIZE+30, -CUBE_SIZE+30,           0, 0// -CUBE_SIZE, 0 // P2
+	,-CUBE_SIZE+30, +CUBE_SIZE+30,           0, 0// -CUBE_SIZE, 0 // P5
+	,+CUBE_SIZE+30, +CUBE_SIZE+30,           0, 0// -CUBE_SIZE, 0 // P6
+	,         0+30,          0+30, CUBE_SIZE*2, 0// +CUBE_SIZE, 0 // P7
+};
+
+unsigned char segPyramid3D[]={
+	0, 4,
+	1, 4,
+	2, 4,
+	3, 4,
+	0, 1,
+	1, 3,
+	3, 2,
+	2, 0,
+};
+
+char ptsPyramid2D [NB_POINTS_PYRAMID	* SIZEOF_2DPOINT];
 
 void drawSegments (unsigned char segments[], char pts2d[], unsigned char nbSeg ) {
 	unsigned char ii;
