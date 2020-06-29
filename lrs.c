@@ -66,13 +66,13 @@ void drawSegments (unsigned char segments[], char pts2d[], unsigned char nbSeg )
     unsigned char isSegment2BeDrawn;
 
 	for (ii=0; ii< nbSeg; ii++) {
-		idxPt1 = segments[ii*2+0];
-        idxPt2 = segments[ii*2+1];
+		idxPt1 = segments[(ii<<1)+0];
+        idxPt2 = segments[(ii<<1)+1];
 
-        aH1=pts2d[idxPt1*SIZEOF_2DPOINT+0];
-        aV1=pts2d[idxPt1*SIZEOF_2DPOINT+1];
-        aH2=pts2d[idxPt2*SIZEOF_2DPOINT+0];
-        aV2=pts2d[idxPt2*SIZEOF_2DPOINT+1];
+        aH1=pts2d[(idxPt1<<2)+0];
+        aV1=pts2d[(idxPt1<<2)+1];
+        aH2=pts2d[(idxPt2<<2)+0];
+        aV2=pts2d[(idxPt2<<2)+1];
 
 
         if (abs(aH2) < abs(aH1)) {
@@ -117,10 +117,10 @@ void drawSegments (unsigned char segments[], char pts2d[], unsigned char nbSeg )
         }
 
 		if (isSegment2BeDrawn) {
-			LargeX0= 120  + (int)(aH1)*4;
-			LargeY0= HORIZONLINE - (int)(aV1)*4;
-			LargeX1= 120  + (int)(aH2)*4;
-			LargeY1= HORIZONLINE - (int)(aV2)*4;
+			LargeX0= 120  + ((int)(aH1)<<2);
+			LargeY0= HORIZONLINE - ((int)(aV1)<<2);
+			LargeX1= 120  + ((int)(aH2)<<2);
+			LargeY1= HORIZONLINE - ((int)(aV2)<<2);
 			DrawClippedLine();
 		}
 	}

@@ -200,7 +200,7 @@ void prepare_graphics() {
 unsigned char isAllowedPosition(signed char X, signed char Y, signed char Z) {
     return 1;
 }
-#define STEP_LENGTH 1
+#define STEP_LENGTH 2
 
 void forward() {
     signed int X, Y;
@@ -270,7 +270,7 @@ void gameLoop() {
             // clear Hires Body part
             HiresClear();
             for (ii=5; ii<16 ; ii++){
-                for (jj = 0; jj < 8; jj++) poke (ADR_DRAWING+((ii*8+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
+                for (jj = 0; jj < 8; jj++) poke (ADR_DRAWING+(((ii<<3)+jj)*SCREEN_WIDTH)+39,SWITCH_TO_TEXT_MODE_50HZ);
             }
 
             drawLandscape ();
