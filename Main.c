@@ -4,6 +4,8 @@
 #include "glOric.h"
 #include "params.h"
 
+// #define AUTOTEST
+
 #define LORES_SCREEN_ADDRESS            0xBB80 
 #define HIRES_SCREEN_ADDRESS            0xA000
 #define STANDARD_CHARSET_ADDRESS        0xB400
@@ -198,54 +200,57 @@ void prepare_graphics() {
 unsigned char isAllowedPosition(signed char X, signed char Y, signed char Z) {
     return 1;
 }
+#define STEP_LENGTH 1
 
 void forward() {
     signed int X, Y;
     X = glCamPosX; Y = glCamPosY;
     if (-112 >= glCamRotZ) {
-        glCamPosX--;
+        glCamPosX-=STEP_LENGTH;
     } else if ((-112 < glCamRotZ) && (-80 >= glCamRotZ)) {
-        glCamPosX--; glCamPosY--;
+        glCamPosX-=STEP_LENGTH; glCamPosY-=STEP_LENGTH;
     } else if ((-80 < glCamRotZ) && (-48 >= glCamRotZ)) {
-        glCamPosY--;
+        glCamPosY-=STEP_LENGTH;
     } else if ((-48 < glCamRotZ) && (-16 >= glCamRotZ)) {
-        glCamPosX++; glCamPosY--;
+        glCamPosX+=STEP_LENGTH; glCamPosY-=STEP_LENGTH;
     } else if ((-16 < glCamRotZ) && (16 >= glCamRotZ)) {
-        glCamPosX++;
+        glCamPosX+=STEP_LENGTH;
     } else if ((16 < glCamRotZ) && (48 >= glCamRotZ)) {
-        glCamPosX++; glCamPosY++;
+        glCamPosX+=STEP_LENGTH; glCamPosY+=STEP_LENGTH;
     } else if ((48 < glCamRotZ) && (80 >= glCamRotZ)) {
-        glCamPosY++;
+        glCamPosY+=STEP_LENGTH;
     } else if ((80 < glCamRotZ) && (112 >= glCamRotZ)) {
-        glCamPosX--; glCamPosY++;
+        glCamPosX-=STEP_LENGTH; glCamPosY+=STEP_LENGTH;
     } else {
-        glCamPosX--;
+        glCamPosX-=STEP_LENGTH;
     }
     if (!isAllowedPosition(glCamPosX, glCamPosY, glCamPosZ)) {
         glCamPosX = X; glCamPosY = Y;
     }
 }
+
+
 void backward() {
     signed int X, Y;
     X = glCamPosX; Y = glCamPosY;
     if (-112 >= glCamRotZ) {
-        glCamPosX++;
+        glCamPosX+=STEP_LENGTH;
     } else if ((-112 < glCamRotZ) && (-80 >= glCamRotZ)) {
-        glCamPosX++; glCamPosY++;
+        glCamPosX+=STEP_LENGTH; glCamPosY+=STEP_LENGTH;
     } else if ((-80 < glCamRotZ) && (-48 >= glCamRotZ)) {
-        glCamPosY++;
+        glCamPosY+=STEP_LENGTH;
     } else if ((-48 < glCamRotZ) && (-16 >= glCamRotZ)) {
-        glCamPosX--; glCamPosY++;
+        glCamPosX-=STEP_LENGTH; glCamPosY+=STEP_LENGTH;
     } else if ((-16 < glCamRotZ) && (16 >= glCamRotZ)) {
-        glCamPosX--;
+        glCamPosX-=STEP_LENGTH;
     } else if ((16 < glCamRotZ) && (48 >= glCamRotZ)) {
-        glCamPosX--; glCamPosY--;
+        glCamPosX-=STEP_LENGTH; glCamPosY-=STEP_LENGTH;
     } else if ((48 < glCamRotZ) && (80 >= glCamRotZ)) {
-        glCamPosY--;
+        glCamPosY-=STEP_LENGTH;
     } else if ((80 < glCamRotZ) && (112 >= glCamRotZ)) {
-        glCamPosX++; glCamPosY--;
+        glCamPosX+=STEP_LENGTH; glCamPosY-=STEP_LENGTH;
     } else {
-        glCamPosX++;
+        glCamPosX+=STEP_LENGTH;
     }
     if (!isAllowedPosition(glCamPosX, glCamPosY, glCamPosZ)) {
         glCamPosX = X; glCamPosY = Y;
@@ -275,6 +280,10 @@ void gameLoop() {
             glProject (ptsCube2D, ptsCube3D, NB_POINTS_CUBE, 0);
             //drawCube ();
             drawSegments (segCube3D, ptsCube2D, NB_SEGMENTS_CUBE );
+
+            glProject (ptsPyramid2D, ptsPyramid3D, NB_POINTS_PYRAMID, 0);
+            //drawCube ();
+            drawSegments (segPyramid3D, ptsPyramid2D, NB_SEGMENTS_PYRAMID );
 
 #ifdef USE_BUFFERED_SCREEN
             ScreenCopyHires();
@@ -427,7 +436,7 @@ void initGame(){
 
 }
 #ifdef AUTOTEST
-void test() {
+void testProjection() {
 
     int ii, jj;
     signed char aH, aV;
@@ -534,12 +543,21 @@ void test() {
     }
     get();
 }
+extern  void divide(unsigned char N, unsigned char D);
+extern unsigned char resDivide;
+void testDivide (){
+    get();
+    divide(183, 7);
+    printf ("%d \n", resDivide);
+    get();
+}
 #endif
 
 void main()
 {
 #ifdef AUTOTEST
-    test();
+    // testProjection();
+    // testDivide();
 #endif
     initGame();
     gameLoop();

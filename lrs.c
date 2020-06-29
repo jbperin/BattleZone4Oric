@@ -1,5 +1,5 @@
 
-#define CUBE_SIZE				12
+#define CUBE_SIZE				4
 #define NB_POINTS_CUBE			8
 #define NB_SEGMENTS_CUBE		12
 
