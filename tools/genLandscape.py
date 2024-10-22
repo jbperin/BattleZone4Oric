@@ -238,7 +238,7 @@ def main ():
 
     with open("landscape_c.c", "w") as f:
         f.write ("unsigned int  tabPointsX[] = {" + ', '.join(map(str,tabPointsX)) + "};\n")
-        f.write ("unsigned char tabPointsY[] = {" + ', '.join(map(str,tabPointsY)) + "};\n")
+        f.write ("unsigned char tabPointsY[] = {" + ', '.join(map(str,[v-20 for v in tabPointsY])) + "};\n")
         f.write ("unsigned char tabSegPt1[] = {" + ', '.join(map(str,tabSegPt1)) + "};\n")
         f.write ("unsigned char tabSegPt2[] = {" + ', '.join(map(str,tabSegPt2)) + "};\n")
         f.write ("unsigned char tabIdxFirstSeg[] = {" + ', '.join(map(str,tabIdxFirstSeg)) + "};\n")
@@ -249,7 +249,7 @@ def main ():
 
     with open("landscape_s.s", "w") as f:
         f.write ("_tabPointsX\n\t.word " + '\n\t.word '.join(map(str,tabPointsX)) + "\n")
-        f.write ("_tabPointsY\n\t.byt " + '\n\t.byt '.join(map(str,tabPointsY)) + "\n")
+        f.write ("_tabPointsY\n\t.byt " + '\n\t.byt '.join(map(str,[v-20 for v in tabPointsY])) + "\n")
         f.write ("_tabSegPt1\n\t.byt " + '\n\t.byt '.join(map(str,tabSegPt1)) + "\n")
         f.write ("_tabSegPt2\n\t.byt " + '\n\t.byt '.join(map(str,tabSegPt2)) + "\n")
         f.write ("_tabIdxFirstSeg\n\t.byt " + '\n\t.byt '.join(map(str,tabIdxFirstSeg)) + "\n")

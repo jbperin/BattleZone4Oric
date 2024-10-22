@@ -9,7 +9,6 @@
 
 #include "params.h"
 
-
 #define OPP         ORA
 
 #define BYTE_PIXEL  6

@@ -5,7 +5,7 @@ void drawLandscape () {
     unsigned char glCamRotZdiv4;
     unsigned char idxSeg, nbLeftClipSeg, nbRightClipSeg, nbNoClipSeg, idxPt1, idxPt2;
 
-    glCamRotZdiv4 = ((unsigned char )glCamRotZ) >> 2;
+    glCamRotZdiv4 = ((unsigned char)-glCamRotZ) >> 2;
 
     idxSeg = tabIdxFirstSeg [glCamRotZdiv4];
     nbLeftClipSeg = tabNbLeftClipSeg [glCamRotZdiv4];
