@@ -7,8 +7,8 @@
 IF "%OSDK%"=="" GOTO ErCfg
 
 
-%osdk%\bin\MemMap.exe build\symbols_RomlessGame map_RomlessGame.htm First %OSDK%\documentation\documentation.css
-explorer map_RomlessGame.htm
+%osdk%\bin\MemMap.exe build\symbols_BattleZone map_BattleZone.htm First %OSDK%\documentation\documentation.css
+explorer map_BattleZone.htm
 
 
 GOTO End

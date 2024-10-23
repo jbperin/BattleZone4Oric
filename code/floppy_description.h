@@ -34,8 +34,8 @@ FileSizeHigh .byt >35281,>760,>8191,>1536
 //
 // List of files written to the floppy
 //
-// Entry #0 '..\build\files\RomlessGame.o'
-// - Starts on  track 0 sector 7 and is 56 sectors long (14325 compressed bytes: 40% of 35281 bytes).
+// Entry #0 '..\build\files\BattleZone.o'
+// - Starts on  track 0 sector 7 and is 56 sectors long (14330 compressed bytes: 40% of 35281 bytes).
 // Entry #1 '..\build\files\Font6x8.hir'
 // - Starts on  track 3 sector 12 and is 3 sectors long (556 compressed bytes: 73% of 760 bytes).
 // Entry #2 '..\data\hrscreen.bin'
@@ -52,7 +52,7 @@ FileSizeHigh .byt >35281,>760,>8191,>1536
 #define LOADER_GAME_PROGRAM_TRACK 0
 #define LOADER_GAME_PROGRAM_SECTOR 135
 #define LOADER_GAME_PROGRAM_SIZE 35281
-#define LOADER_GAME_PROGRAM_SIZE_COMPRESSED 14325
+#define LOADER_GAME_PROGRAM_SIZE_COMPRESSED 14330
 #define LOADER_FONT_6x8 1
 #define HIRES_SCREEN 2
 

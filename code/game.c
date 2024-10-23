@@ -25,12 +25,14 @@ void onKey(unsigned char c){
     if (c == KEY_ESCAPE) {
         // localGameData->running = 0;
     } else if (c == KEY_LEFT){
-        {asm (
-            ":stop_here:"
-        );}
-        glCamRotZ += 4; 
+        // {asm (
+        //     ":stop_here:"
+        // );}
+        glCamRotZ += 8; 
     } else if (c == KEY_RIGHT){
-        glCamRotZ -= 4;
+        glCamRotZ -= 8;
+    } else if (c == KEY_SPACE) {
+        missileNew();
     }    
 }
 void onIT(){

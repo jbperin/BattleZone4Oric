@@ -20,7 +20,7 @@ FormatVersion 0.20
 DefineDisk 2 42 17							; 2 sides, 42 tracks, 17 sectors
 
 OutputLayoutFile floppy_description.h
-OutputFloppyFile ..\build\RomlessGame.dsk
+OutputFloppyFile ..\build\BattleZone.dsk
 
 ;AddDefine LOADER_SHOW_DEBUGINFO 1
 ;AddDefine ENABLE_TIMING_DEBUGGING 1
@@ -55,7 +55,7 @@ SetCompressionMode FilePack 						; So far only two modes: 'None' and 'FilePack'
 ;
 ; Then the files used in the demo
 ;
-AddFile ..\build\files\RomlessGame.o 				; The "First program" picture
+AddFile ..\build\files\BattleZone.o 				; The "First program" picture
 AddDefine LOADER_GAME_PROGRAM {FileIndex}
 AddDefine LOADER_GAME_PROGRAM_ADDRESS $400
 AddDefine LOADER_GAME_PROGRAM_TRACK {FileTrack}

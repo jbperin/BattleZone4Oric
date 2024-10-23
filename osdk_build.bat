@@ -78,12 +78,12 @@ ECHO Assembling the main part
 @REM kernel ay_s input keyboard keyboard_c keybuf_s keyrepeat mem_s myRom myRom_s osme_s print rand score_s sound system task25hz
 SET OSDKLINK=
 SET OSDKADDR=$400
-SET OSDKNAME=RomlessGame
+SET OSDKNAME=BattleZone
 SET OSDKFILE=main allasm allc overlay loader_api
 SET OSDKDISK=
 CALL %OSDK%\bin\make.bat %OSDKFILE%
-copy build\final.out ..\build\files\RomlessGame.o
-copy build\symbols ..\build\symbols_RomlessGame
+copy build\final.out ..\build\files\BattleZone.o
+copy build\symbols ..\build\symbols_BattleZone
 
 ::pause
 
