@@ -16,6 +16,7 @@
 #include "h3/h3_s.s"
 #include "raster/screen.s"
 #include "raster/line.s"
+#include "3d/tabAngle2Col.h"
 #include "3d/project_s.s"
 #include "3d/shapeLoader_s.s"
 
